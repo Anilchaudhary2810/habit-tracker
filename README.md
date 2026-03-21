@@ -63,20 +63,6 @@ npm run dev
 
 ---
 
-## 🔑 Admin Setup
-
-To access the **🛡️ Admin Portal**, you can use the default administrator account (created during initial setup) or create your own:
-
-```bash
-cd backend
-python manage.py createsuperuser
-```
-
-Default Admin Credentials (if set up by the helper script):
-- **Username**: `anil`
-- **Password**: `Anil@$123`
-
----
 
 ## 📸 Screenshots
 
