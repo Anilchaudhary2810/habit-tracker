@@ -4,8 +4,11 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.views import APIView
-from .models import Habit, DailyEntry, Badge, UserBadge
-from .serializers import HabitSerializer, DailyEntrySerializer, BadgeSerializer, UserBadgeSerializer, LeaderboardSerializer
+from .models import Habit, DailyEntry, Badge, UserBadge, Notification
+from .serializers import (
+    HabitSerializer, DailyEntrySerializer, BadgeSerializer, 
+    UserBadgeSerializer, LeaderboardSerializer, NotificationSerializer
+)
 from accounts.models import User
 
 class HabitViewSet(viewsets.ModelViewSet):
@@ -73,14 +76,40 @@ class DailyEntryViewSet(viewsets.ModelViewSet):
         self.check_badges(user)
 
     def check_badges(self, user):
-        # Initial badges if they don't exist
-        Badge.objects.get_or_create(name="7 Day Streak", threshold_days=7, defaults={"description": "7 days of consistency", "icon": "medal"})
-        Badge.objects.get_or_create(name="30 Day Streak", threshold_days=30, defaults={"description": "30 days of consistency", "icon": "trophy"})
+        # Default streaks
+        Badge.objects.get_or_create(name="1 Day Streak", threshold_days=1, defaults={"description": "Beginning of a journey", "icon": "star"})
+        Badge.objects.get_or_create(name="7 Day Streak", threshold_days=7, defaults={"description": "Consistency is key", "icon": "flame"})
+        Badge.objects.get_or_create(name="30 Day Streak", threshold_days=30, defaults={"description": "Habit master", "icon": "trophy"})
         
         badges = Badge.objects.filter(threshold_days__lte=user.current_streak)
         for badge in badges:
             if not UserBadge.objects.filter(user=user, badge=badge).exists():
                 UserBadge.objects.create(user=user, badge=badge)
+                # Create Notification
+                Notification.objects.create(
+                    user=user,
+                    title="🎉 Achievement Unlocked!",
+                    message=f"You've earned the '{badge.name}' badge for your {user.current_streak} day streak!",
+                    notification_type='achievement'
+                )
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    serializer_class = NotificationSerializer
+    
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
+
+    @action(detail=False, methods=['post'])
+    def mark_all_as_read(self, request):
+        Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+        return Response({"status": "success"})
+
+    @action(detail=True, methods=['post'])
+    def mark_as_read(self, request, pk=None):
+        notification = self.get_object()
+        notification.is_read = True
+        notification.save()
+        return Response({"status": "success"})
 
 class AnalyticsView(APIView):
     def get(self, request):

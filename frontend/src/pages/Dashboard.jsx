@@ -6,10 +6,33 @@ import AnalyticsChart from '../components/AnalyticsChart';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const { user, setUser } = useAuth();
   const [analytics, setAnalytics] = useState([]);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await api.get('habits/notifications/');
+      const unreadAlerts = res.data.filter(n => !n.is_read);
+      
+      unreadAlerts.forEach(async (n) => {
+        if (n.notification_type === 'achievement') {
+           toast(n.message, { 
+             icon: '🎉',
+             duration: 6000,
+           });
+        } else {
+           toast.success(n.message);
+        }
+        // Mark as read immediately to avoid repeats (use custom action)
+        await api.post(`habits/notifications/${n.id}/mark_as_read/`);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const fetchProfile = async () => {
     try {
@@ -32,11 +55,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAnalytics();
+    fetchNotifications();
   }, []);
 
   const handleUpdate = () => {
     fetchProfile();
     fetchAnalytics();
+    fetchNotifications();
   };
 
   return (

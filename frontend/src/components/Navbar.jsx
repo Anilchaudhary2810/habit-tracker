@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Home, Trophy, Plus, LogOut, ShieldCheck, User } from 'lucide-react';
+import { Home, Trophy, Plus, LogOut, User } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -36,11 +36,6 @@ const Navbar = () => {
                  {link.icon} {link.label}
               </NavLink>
             ))}
-            {user?.is_staff && (
-              <a href="http://localhost:8000/admin/" target="_blank" rel="noopener noreferrer" className="nav-link text-purple-400 hover:text-purple-300">
-                 <ShieldCheck size={20} /> Admin
-              </a>
-            )}
           </div>
 
           <div className="flex items-center gap-3 sm:gap-5">
@@ -74,12 +69,6 @@ const Navbar = () => {
             <span className="text-[10px] font-bold uppercase tracking-tighter">{link.label}</span>
           </NavLink>
         ))}
-        {user?.is_staff && (
-          <a href="http://localhost:8000/admin/" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 text-purple-400">
-            <ShieldCheck size={22} />
-            <span className="text-[10px] font-bold uppercase tracking-tighter">Admin</span>
-          </a>
-        )}
       </div>
     </>
   );

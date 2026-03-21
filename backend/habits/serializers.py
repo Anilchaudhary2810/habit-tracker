@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Habit, DailyEntry, Badge, UserBadge
+from .models import Habit, DailyEntry, Badge, UserBadge, Notification
 from accounts.models import User
 
 class BadgeSerializer(serializers.ModelSerializer):
@@ -24,7 +24,12 @@ class UserBadgeSerializer(serializers.ModelSerializer):
         model = UserBadge
         fields = ('badge', 'awarded_at')
 
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
 class LeaderboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'points', 'current_streak', 'max_streak')
+        fields = ('id', 'username', 'points', 'current_streak', 'max_streak', 'is_staff')

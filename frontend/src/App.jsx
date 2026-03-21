@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Planning from './pages/Planning';
 import Leaderboard from './pages/Leaderboard';
+import { Toaster } from 'react-hot-toast';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -25,6 +26,16 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+        <Toaster position="top-right" toastOptions={{
+            style: {
+                background: '#0f172a',
+                color: '#fff',
+                border: '1px solid #1e293b',
+                borderRadius: '1rem',
+                fontSize: '14px',
+                fontWeight: '600'
+            }
+        }} />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
