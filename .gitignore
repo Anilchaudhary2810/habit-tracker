@@ -1,0 +1,41 @@
+# Recommended .gitignore for NexHabit
+
+# Node.js
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Python
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.Python
+backend/env/
+backend/venv/
+backend/pip-log.txt
+backend/pip-delete-this-directory.txt
+backend/.venv/
+backend/db.sqlite3
+backend/.env
+
+# Logs and outputs
+*.txt
+*.log
+*.tmp
+frontend/pid_*
+frontend/task_*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
