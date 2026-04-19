@@ -37,6 +37,7 @@ class Habit(models.Model):
     month = models.IntegerField() # 1-12
     year = models.IntegerField()
     start_day = models.IntegerField(default=1) # 1-31
+    is_archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -46,6 +47,7 @@ class DailyEntry(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE, related_name='entries')
     date = models.DateField()
     completed = models.BooleanField(default=False)
+    note = models.TextField(blank=True, default='')
     
     class Meta:
         unique_together = ('habit', 'date')

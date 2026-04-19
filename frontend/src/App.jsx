@@ -12,8 +12,8 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
   if (loading) return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-primary-500/20 border-t-primary-500 rounded-full animate-spin" />
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
     </div>
   );
   
@@ -28,9 +28,9 @@ function App() {
       <AuthProvider>
         <Toaster position="top-right" toastOptions={{
             style: {
-                background: '#0f172a',
-                color: '#fff',
-                border: '1px solid #1e293b',
+                background: '#ffffff',
+                color: '#0f172a',
+                border: '1px solid #cbd5e1',
                 borderRadius: '1rem',
                 fontSize: '14px',
                 fontWeight: '600'
